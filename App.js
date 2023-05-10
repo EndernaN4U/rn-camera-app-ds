@@ -3,28 +3,23 @@ import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LandingPage from './components/LandingPage';
+
+import Main from './components/Main';
+import Gallery from './components/Gallery';
+
+import colors from './data/colors.json'
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
   <NavigationContainer>
-    <Stack.Navigator>
-      <Stack.Screen name="main" component={LandingPage} />
+    <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: colors.bgColor} }}>
+      <Stack.Screen name="main" component={Main} options={{ headerShown: false, statusBarColor: colors.bgColor }}/>
+      <Stack.Screen name="gallery" component={Gallery} options={{ statusBarColor: colors.bgColor, title: "Photos Gallery" }}/> 
     </Stack.Navigator>
   </NavigationContainer>
  );
 }
 
 export default App;
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

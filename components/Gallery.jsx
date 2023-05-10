@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function LandingPage() {
+export default function Gallery() {
   return (
     <View>
-      <Text>LandingPage</Text>
+      <Text>Gallery</Text>
     </View>
   )
 }
