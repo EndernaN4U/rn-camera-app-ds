@@ -4,8 +4,8 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Main from './components/Main';
-import Gallery from './components/Gallery';
+import Main from './screens/Main';
+import Gallery from './screens/Gallery';
 
 import colors from './data/colors.json'
 
