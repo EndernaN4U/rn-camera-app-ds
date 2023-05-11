@@ -1,12 +1,14 @@
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator } from 'react-native'
 import MyButton from '../components/MyButton'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
 
 export default function Gallery() {
     const [photos, setPhotos] = useState([]);
-    const [layout, setLayout] = useState(false);
+    const [layout, setLayout] = useState(true);
+
+    const timing = useRef(0);
 
     useEffect(()=>{
         (async()=>{
@@ -36,13 +38,20 @@ export default function Gallery() {
                 data={photos}
                 numColumns={layout? 4 : 1}
                 renderItem={({item})=>
-                <View 
-                style={{
+                <View onTouchStart={()=>timing.current = Date.now()}
+                        onTouchEnd={()=>{
+                            if(Date.now() - timing.current > 200){
+                                alert('Long')
+                            }
+                            else alert('short')
+                        }}
+                 style={{
                     height: layout?dims.width/4:210,
                     width: layout?dims.width/4:dims.width,
                     ...styles.imageView
                 }}>
-                    <Image style={styles.image} source={{
+                    <Image 
+                        style={styles.image} source={{
                         uri: item.uri,
                         width: layout?dims.width/4.5:dims.width,
                         height: layout?dims.width/4.5:200
