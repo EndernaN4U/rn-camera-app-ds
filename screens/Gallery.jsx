@@ -1,11 +1,12 @@
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator } from 'react-native'
-import MyButton from './MyButton'
+import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator, ScrollView } from 'react-native'
+import MyButton from '../components/MyButton'
 import React, { useEffect, useState } from 'react'
 import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
 
 export default function Gallery() {
     const [photos, setPhotos] = useState([]);
+    const [layout, setLayout] = useState(false);
 
     useEffect(()=>{
         (async()=>{
@@ -24,26 +25,36 @@ export default function Gallery() {
   return (
     <View style={styles.container}>
         <View style={styles.btnContainer}>
-            <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Layout</MyButton>
+            <MyButton style={styles.buttons} textStyle={styles.buttonsText}
+            onPress={()=>setLayout(dat=>!dat)}>Layout</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Camera</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
         </View>
-        <View>
         {
             (photos.length > 0)?
             <FlatList 
                 data={photos}
-                numColumns={4}
+                numColumns={layout? 4 : 1}
                 renderItem={({item})=>
-                <View style={styles.imageView}>
-                    <Image style={styles.image} source={{uri: item.uri, width: dims.width/4.5, height: dims.width/4.5}}/>
+                <View 
+                style={{
+                    height: layout?dims.width/4:210,
+                    width: layout?dims.width/4:dims.width,
+                    ...styles.imageView
+                }}>
+                    <Image style={styles.image} source={{
+                        uri: item.uri,
+                        width: layout?dims.width/4.5:dims.width,
+                        height: layout?dims.width/4.5:200
+                    }}/>
                     <Text style={styles.imageText}>{item.id}</Text>
                 </View>}
+                keyExtractor={item=>item.id}
+                key={layout? 4 : 1}
             />  
             :
             <ActivityIndicator />
         }
-        </View>
     </View>
   )
 }
@@ -59,11 +70,8 @@ const styles = StyleSheet.create({
         borderRadius: 20
     },
     imageView:{
-        width: dims.width/4,
-        height: dims.width/4,
         justifyContent: 'center',
         alignItems: 'center'
-        
     },
     imageText:{
         position: 'absolute',
@@ -77,7 +85,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        height: 75
+        height: 75,
+        position:'relative',
+        borderColor: colors.mainTextColor,
+        borderWidth: 1
     },
     buttons:{
         backgroundColor: colors.bgColor,
@@ -94,5 +105,8 @@ const styles = StyleSheet.create({
         fontSize: 22,
         textAlign: 'center',
         color: colors.mainTextColor
+    },
+    gridView:{
+        
     }
   });
