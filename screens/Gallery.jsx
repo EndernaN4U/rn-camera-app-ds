@@ -5,7 +5,7 @@ import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
 import FotoItem from '../components/FotoItem'
 
-export default function Gallery() {
+export default function Gallery({navigation}) {
     const [photos, setPhotos] = useState([]);
     const [layout, setLayout] = useState(true);
 
@@ -25,6 +25,8 @@ export default function Gallery() {
             }
         })()
     },[])
+    
+    const bigPhoto = (item)=>navigation.navigate('photo', {item: item})
 
   return (
     <View style={styles.container}>
@@ -40,7 +42,9 @@ export default function Gallery() {
                 data={photos}
                 numColumns={layout? 4 : 1}
                 renderItem={({item, index})=>
-                <FotoItem item={item} index={index} setPhotos={setPhotos} layout={layout}/>
+                    <FotoItem item={item} index={index}
+                     setPhotos={setPhotos} layout={layout}
+                     bigPhoto={bigPhoto}/>
                 }
                 keyExtractor={item=>item.id}
                 key={layout? 4 : 1}

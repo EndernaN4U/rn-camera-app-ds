@@ -2,7 +2,7 @@ import { View, Text, Dimensions, StyleSheet, Image } from 'react-native'
 import React, {useRef} from 'react'
 import colors from '../data/colors.json'
 
-export default function FotoItem({item, index, layout, setPhotos}) {
+export default function FotoItem({item, index, layout, setPhotos, bigPhoto}) {
     const timing = useRef(0);
 
   return (
@@ -15,7 +15,7 @@ export default function FotoItem({item, index, layout, setPhotos}) {
                     return [...dat]
                 })
             }
-            else alert('short')
+            else bigPhoto(item)
         }}
         style={{
         height: layout?dims.width/4:210,
