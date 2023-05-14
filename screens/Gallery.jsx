@@ -19,6 +19,9 @@ export default function Gallery() {
                     first: 100,
                     mediaType: 'photo'
                 })
+                obj.assets.map((el)=>{
+                    el.sel = false;
+                })
                 setPhotos(obj.assets);
             }
         })()
@@ -37,26 +40,38 @@ export default function Gallery() {
             <FlatList 
                 data={photos}
                 numColumns={layout? 4 : 1}
-                renderItem={({item})=>
+                renderItem={({item, index})=>
                 <View onTouchStart={()=>timing.current = Date.now()}
                         onTouchEnd={()=>{
-                            if(Date.now() - timing.current > 200){
-                                alert('Long')
+                            if(Date.now() - timing.current > 100){
+                                setPhotos(dat=>{
+                                    dat[index].sel = !dat[index].sel
+                                    return [...dat]
+                                })
                             }
                             else alert('short')
                         }}
                  style={{
                     height: layout?dims.width/4:210,
                     width: layout?dims.width/4:dims.width,
-                    ...styles.imageView
-                }}>
+                    ...styles.imageView}}
+                >
+
                     <Image 
                         style={styles.image} source={{
                         uri: item.uri,
                         width: layout?dims.width/4.5:dims.width,
                         height: layout?dims.width/4.5:200
                     }}/>
+
                     <Text style={styles.imageText}>{item.id}</Text>
+
+                    {
+                        item.sel?
+                        <View style={styles.selView}></View>
+                        :
+                        <></>
+                    }
                 </View>}
                 keyExtractor={item=>item.id}
                 key={layout? 4 : 1}
@@ -115,7 +130,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: colors.mainTextColor
     },
-    gridView:{
-        
+    selView:{
+        backgroundColor: 'black',
+        position: 'absolute',
+        opacity: 0.3,
+        height: '100%',
+        width: '100%',
+        borderRadius: 20
     }
   });
