@@ -3,12 +3,11 @@ import MyButton from '../components/MyButton'
 import React, { useEffect, useRef, useState } from 'react'
 import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
+import FotoItem from '../components/FotoItem'
 
 export default function Gallery() {
     const [photos, setPhotos] = useState([]);
     const [layout, setLayout] = useState(true);
-
-    const timing = useRef(0);
 
     useEffect(()=>{
         (async()=>{
@@ -41,38 +40,8 @@ export default function Gallery() {
                 data={photos}
                 numColumns={layout? 4 : 1}
                 renderItem={({item, index})=>
-                <View onTouchStart={()=>timing.current = Date.now()}
-                        onTouchEnd={()=>{
-                            if(Date.now() - timing.current > 100){
-                                setPhotos(dat=>{
-                                    dat[index].sel = !dat[index].sel
-                                    return [...dat]
-                                })
-                            }
-                            else alert('short')
-                        }}
-                 style={{
-                    height: layout?dims.width/4:210,
-                    width: layout?dims.width/4:dims.width,
-                    ...styles.imageView}}
-                >
-
-                    <Image 
-                        style={styles.image} source={{
-                        uri: item.uri,
-                        width: layout?dims.width/4.5:dims.width,
-                        height: layout?dims.width/4.5:200
-                    }}/>
-
-                    <Text style={styles.imageText}>{item.id}</Text>
-
-                    {
-                        item.sel?
-                        <View style={styles.selView}></View>
-                        :
-                        <></>
-                    }
-                </View>}
+                <FotoItem item={item} index={index} setPhotos={setPhotos} layout={layout}/>
+                }
                 keyExtractor={item=>item.id}
                 key={layout? 4 : 1}
             />  
@@ -89,20 +58,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#222'
-    },
-    image:{
-        borderRadius: 20
-    },
-    imageView:{
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    imageText:{
-        position: 'absolute',
-        right: 10,
-        bottom: 10,
-        fontSize: 10,
-        color: colors.mainTextColor
     },
     btnContainer:{
         display: 'flex',
@@ -129,13 +84,5 @@ const styles = StyleSheet.create({
         fontSize: 22,
         textAlign: 'center',
         color: colors.mainTextColor
-    },
-    selView:{
-        backgroundColor: 'black',
-        position: 'absolute',
-        opacity: 0.3,
-        height: '100%',
-        width: '100%',
-        borderRadius: 20
     }
   });
