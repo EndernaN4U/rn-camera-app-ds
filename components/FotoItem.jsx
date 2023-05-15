@@ -3,20 +3,29 @@ import React, {useRef} from 'react'
 import colors from '../data/colors.json'
 
 export default function FotoItem({item, index, layout, setPhotos, bigPhoto}) {
-    const timing = useRef(0);
+    const timing = useRef(-1);
 
   return (
     <View   
-        onTouchStart={()=>timing.current = Date.now()}
-        onTouchEnd={()=>{
-            if(Date.now() - timing.current > 100){
-                setPhotos(dat=>{
-                    dat[index].sel = !dat[index].sel
-                    return [...dat]
-                })
-            }
-            else bigPhoto(item)
+        onTouchStart={()=>{
+            timing.current = 1;
+            setTimeout(()=>{
+                if(timing.current == 1){
+                    setPhotos(dat=>{
+                        dat[index].sel = !dat[index].sel
+                        return [...dat]
+                    })
+                }
+                else if(timing.current == 0) bigPhoto(item)
+            },100)
         }}
+        onTouchEnd={()=>{
+            timing.current = 0;
+        }}
+        onTouchCancel={()=>{
+            timing.current = -1;
+        }}
+        
         style={{
         height: layout?dims.width/4:210,
         width: layout?dims.width/4:dims.width,
