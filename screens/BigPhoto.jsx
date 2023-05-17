@@ -2,7 +2,8 @@ import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
 import MyButton from '../components/MyButton';
 import * as Sharing from 'expo-sharing';
-import colors from '../data/colors.json'
+import colors from '../data/colors.json';
+import * as MediaLibrary from "expo-media-library";
 
 export default function BigPhoto({navigation, route}) {
     const {item} = route.params;
@@ -12,6 +13,13 @@ export default function BigPhoto({navigation, route}) {
             if(!isit) return alert("No permision");
             Sharing.shareAsync(item.uri)
         })
+    }
+
+    const deletep = ()=>{
+        MediaLibrary.deleteAssetsAsync([item]).then(isit=>{
+            if(isit) navigation.goBack();
+        });
+        
     }
     
   return (
@@ -23,7 +31,7 @@ export default function BigPhoto({navigation, route}) {
         </View>
         <View>
             <MyButton onPress={share} style={styles.buttons} textStyle={styles.buttonsText}>Share</MyButton>
-            <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
+            <MyButton onPress={deletep} style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
         </View>
     </View>
   )

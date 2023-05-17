@@ -4,30 +4,41 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
 import FotoItem from '../components/FotoItem'
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Gallery({navigation}) {
     const [photos, setPhotos] = useState([]);
     const [layout, setLayout] = useState(true);
+    const isFocused = useIsFocused();
+
+    const refresh = async()=>{
+        let obj = await MediaLibrary.getAssetsAsync({
+            first: 200,
+            mediaType: 'photo'
+        })
+        obj.assets.sort((a,b)=>{return b.modificationTime - a.modificationTime});
+        obj.assets.map((el)=>{
+            el.sel = false;
+        })
+        setPhotos(obj.assets);
+    }
 
     useEffect(()=>{
         (async()=>{
             let {status} = await MediaLibrary.requestPermissionsAsync();
-            if(status !== 'granted') alert('Brak uprawnien');
-            else{
-                let obj = await MediaLibrary.getAssetsAsync({
-                    first: 200,
-                    mediaType: 'photo'
-                })
-                obj.assets.sort((a,b)=>{return b.modificationTime - a.modificationTime});
-                obj.assets.map((el)=>{
-                    el.sel = false;
-                })
-                setPhotos(obj.assets);
-            }
+            if(status !== 'granted') return alert('Brak uprawnien');
+            refresh();
         })()
-    },[])
+    },[isFocused])
     
     const bigPhoto = (item)=>navigation.navigate('photo', {item: item})
+
+    const deleteSelected = async()=>{
+        const fPhotos = photos.filter(x=>x.sel)
+        if(fPhotos.length == 0) return alert("Nalezy cos wybrać");
+        await MediaLibrary.deleteAssetsAsync(fPhotos)
+        refresh();
+    }
 
   return (
     <View style={styles.container}>
@@ -36,7 +47,8 @@ export default function Gallery({navigation}) {
             onPress={()=>setLayout(dat=>!dat)}>Layout</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}
             onPress={()=>navigation.navigate('camera')}>Camera</MyButton>
-            <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
+            <MyButton style={styles.buttons} textStyle={styles.buttonsText}
+            onPress={deleteSelected}>Delete</MyButton>
         </View>
         {
             (photos.length > 0)?
