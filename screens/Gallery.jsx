@@ -33,7 +33,8 @@ export default function Gallery({navigation}) {
         <View style={styles.btnContainer}>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}
             onPress={()=>setLayout(dat=>!dat)}>Layout</MyButton>
-            <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Camera</MyButton>
+            <MyButton style={styles.buttons} textStyle={styles.buttonsText}
+            onPress={()=>navigation.navigate('camera')}>Camera</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
         </View>
         {

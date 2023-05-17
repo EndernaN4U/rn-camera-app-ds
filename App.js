@@ -9,6 +9,7 @@ import Gallery from './screens/Gallery';
 
 import colors from './data/colors.json'
 import BigPhoto from './screens/BigPhoto';
+import CameraScreen from './screens/Camera';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ function App() {
       <Stack.Screen name="main" component={Main} options={{ headerShown: false, statusBarColor: colors.bgColor }}/>
       <Stack.Screen name="gallery" component={Gallery} options={{ statusBarColor: colors.bgColor, title: "Photos Gallery" }}/> 
       <Stack.Screen name="photo" component={BigPhoto} options={{ statusBarColor: colors.bgColor, title: "Wybrane zdjęcie" }}/> 
+      <Stack.Screen name="camera" component={CameraScreen} options={{ statusBarColor: colors.bgColor, title: "Kamera" }}/> 
     </Stack.Navigator>
   </NavigationContainer>
  );
