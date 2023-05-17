@@ -15,9 +15,10 @@ export default function Gallery({navigation}) {
             if(status !== 'granted') alert('Brak uprawnien');
             else{
                 let obj = await MediaLibrary.getAssetsAsync({
-                    first: 100,
+                    first: 200,
                     mediaType: 'photo'
                 })
+                obj.assets.sort((a,b)=>{return b.modificationTime - a.modificationTime});
                 obj.assets.map((el)=>{
                     el.sel = false;
                 })
