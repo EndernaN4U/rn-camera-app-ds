@@ -23,7 +23,7 @@ export default function CameraScreen() {
         })()
     },[])
   return (
-    <>
+    <View style={styles.container}>
       {
         perm?
         <Camera 
@@ -34,19 +34,25 @@ export default function CameraScreen() {
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'flex-end', gap: 20 }}>
                 <CircleButton onPress={()=>{
                   setType(type=>(type == 'back')? 'front': 'back')
-                }} icon="Type"/>
-                <CircleButton onPress={takePhoto} icon="Photo"/>
+                }} icon="change" size={75}/>
+                <CircleButton onPress={takePhoto} icon="photo" size={100}/>
             </View>
         </Camera>
         :
         <Text>Dawaj perma no</Text>
       }
-    </>
+    </View>
   )
 }
 
 const dims = Dimensions.get("screen");
 const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    backgroundColor: "#222",
+    display: 'flex',
+    justifyContent: 'center'
+  },
   camera: {
     width: dims.width,
     aspectRatio: 9/16

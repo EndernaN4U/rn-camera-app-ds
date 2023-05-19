@@ -1,21 +1,33 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 
-export default function CircleButton({onPress, icon}) {
+const imgs = {
+  "change" : "https://cdn-icons-png.flaticon.com/512/126/126502.png",
+  "photo" : "https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-svg-png-icon-download-1.png"
+}
+
+export default function CircleButton({onPress, icon, size}) {
+
+  const styles = StyleSheet.create({
+    btn:{
+      backgroundColor: 'grey',
+      opacity: 0.85,
+      width: size,
+      height: size,
+      borderRadius: size/2,
+      justifyContent: 'center',
+      alignItems:'center'
+    },
+    img:{
+      width: size/1.5,
+      height: size/1.5
+    }
+  })
 
   return (
     <TouchableOpacity style={styles.btn} onPress={onPress}>
-      
+      <Image style={styles.img} source={{uri: imgs[icon]}}/>
     </TouchableOpacity>
   )
 }
 
-const styles = StyleSheet.create({
-  btn:{
-    backgroundColor: 'grey',
-    opacity: 0.85,
-    width: 100,
-    height: 100,
-    borderRadius: 50
-  }
-})

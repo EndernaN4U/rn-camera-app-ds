@@ -6,7 +6,7 @@ import colors from '../data/colors.json'
 import FotoItem from '../components/FotoItem'
 import { useIsFocused } from "@react-navigation/native";
 
-export default function Gallery({navigation}) {
+export default function Gallery({navigation, route}) {
     const [photos, setPhotos] = useState([]);
     const [layout, setLayout] = useState(true);
     const isFocused = useIsFocused();
@@ -17,9 +17,10 @@ export default function Gallery({navigation}) {
             mediaType: 'photo'
         })
         obj.assets.sort((a,b)=>{return b.modificationTime - a.modificationTime});
-        obj.assets.map((el)=>{
-            el.sel = false;
+        obj.assets.map((el, ind)=>{
+            el.sel = (photos[ind])? photos[ind].sel : false;
         })
+
         setPhotos(obj.assets);
     }
 
@@ -27,11 +28,11 @@ export default function Gallery({navigation}) {
         (async()=>{
             let {status} = await MediaLibrary.requestPermissionsAsync();
             if(status !== 'granted') return alert('Brak uprawnien');
-            refresh();
+            if(isFocused) refresh();
         })()
     },[isFocused])
     
-    const bigPhoto = (item)=>navigation.navigate('photo', {item: item})
+    const bigPhoto = (item)=>{navigation.navigate('photo', {item: item})}
 
     const deleteSelected = async()=>{
         const fPhotos = photos.filter(x=>x.sel)
@@ -56,7 +57,7 @@ export default function Gallery({navigation}) {
                 data={photos}
                 numColumns={layout? 4 : 1}
                 renderItem={({item, index})=>
-                    <FotoItem item={item} index={index}
+                    <FotoItem key={index} item={item} index={index}
                      setPhotos={setPhotos} layout={layout}
                      bigPhoto={bigPhoto}/>
                 }
