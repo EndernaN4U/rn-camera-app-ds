@@ -23,13 +23,12 @@ export default function BigPhoto({navigation, route}) {
     }
     
   return (
-    <View>
-        <View>
-            <Text>{item.id}</Text>
+    <View style={styles.container}>
+        <View style={styles.imageView}>
             <Image style={styles.image}
              source={{uri: item.uri, width: 350, height: 600}}/>
         </View>
-        <View>
+        <View style={styles.buttonView}>
             <MyButton onPress={share} style={styles.buttons} textStyle={styles.buttonsText}>Share</MyButton>
             <MyButton onPress={deletep} style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
         </View>
@@ -39,14 +38,30 @@ export default function BigPhoto({navigation, route}) {
 
 const dims = Dimensions.get('screen');
 const styles = StyleSheet.create({
+    container:{
+        backgroundColor: "#222",
+        flex: 1
+    },
+    imageView:{
+        marginVertical: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    buttonView:{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
     image:{
         maxWidth: 350,
-        maxHeight: 600
+        maxHeight: 600,
+        aspectRatio: 9/16
     },
     buttons:{
         backgroundColor: colors.bgColor,
-        width: dims.width / 4.5,
-        height: 35,
+        width: dims.width / 3,
+        height: 50,
 
         justifyContent: 'center',
         alignItems: 'center',

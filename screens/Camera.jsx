@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Camera } from "expo-camera";
 import CircleButton from '../components/CircleButton';
@@ -29,7 +29,7 @@ export default function CameraScreen() {
         <Camera 
             ref={camera}
             type={type === 'back'? Camera.Constants.Type.back : Camera.Constants.Type.front}
-            style={{ flex: 1 }}
+            style={styles.camera}
         >
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems:'flex-end', gap: 20 }}>
                 <CircleButton onPress={()=>{
@@ -44,3 +44,11 @@ export default function CameraScreen() {
     </>
   )
 }
+
+const dims = Dimensions.get("screen");
+const styles = StyleSheet.create({
+  camera: {
+    width: dims.width,
+    aspectRatio: 9/16
+  }
+})
