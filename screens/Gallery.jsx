@@ -37,7 +37,15 @@ export default function Gallery({navigation, route}) {
     const deleteSelected = async()=>{
         const fPhotos = photos.filter(x=>x.sel)
         if(fPhotos.length == 0) return alert("Nalezy cos wybrać");
-        await MediaLibrary.deleteAssetsAsync(fPhotos)
+
+        await MediaLibrary.deleteAssetsAsync(fPhotos);
+        
+        setPhotos(dat=>{
+            dat.forEach(el=>{
+                el.sel = false;
+            })
+            return dat;
+        })
         refresh();
     }
 
