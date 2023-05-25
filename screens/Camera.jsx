@@ -70,7 +70,7 @@ export default function CameraScreen() {
             </View>
             {
              opnd? 
-                <SettingMenu setSettings={()=>{}} settings={stngs} possibles={posStngs.current}/>
+                <SettingMenu setSettings={setStngs} settings={stngs} possibles={posStngs.current}/>
               :
                 <></>
             }
