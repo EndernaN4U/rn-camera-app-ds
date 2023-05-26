@@ -31,8 +31,11 @@ export default function Gallery({navigation, route}) {
             if(isFocused) refresh();
         })()
     },[isFocused])
-    
-    const bigPhoto = (item)=>{navigation.navigate('photo', {item: item})}
+
+    const deleteOne = (name)=>{
+        setPhotos(dat=>dat.filter(x=>x.filename !== name))
+    }
+    const bigPhoto = (item)=>{navigation.navigate('photo', {item: item, setGal: deleteOne })}
 
     const deleteSelected = async()=>{
         const fPhotos = photos.filter(x=>x.sel)

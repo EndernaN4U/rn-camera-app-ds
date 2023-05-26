@@ -6,7 +6,7 @@ import colors from '../data/colors.json';
 import * as MediaLibrary from "expo-media-library";
 
 export default function BigPhoto({navigation, route}) {
-    const {item} = route.params;
+    const {item, setGal} = route.params;
 
     const share = ()=>{
         Sharing.isAvailableAsync().then(isit=>{
@@ -17,7 +17,8 @@ export default function BigPhoto({navigation, route}) {
 
     const deletep = ()=>{
         MediaLibrary.deleteAssetsAsync([item]).then(isit=>{
-            if(isit) navigation.goBack();
+            setGal(item.filename)
+            navigation.goBack();
         });
         
     }
