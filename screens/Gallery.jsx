@@ -18,7 +18,7 @@ export default function Gallery({navigation, route}) {
         })
         obj.assets.sort((a,b)=>{return b.modificationTime - a.modificationTime});
         obj.assets.map((el, ind)=>{
-            el.sel = (photos[ind])? photos[ind].sel : false;
+            el.sel = (photos[ind] && photos[ind].filename == el.filename)? photos[ind].sel : false;
         })
 
         setPhotos(obj.assets);
@@ -32,10 +32,7 @@ export default function Gallery({navigation, route}) {
         })()
     },[isFocused])
 
-    const deleteOne = (name)=>{
-        setPhotos(dat=>dat.filter(x=>x.filename !== name))
-    }
-    const bigPhoto = (item)=>{navigation.navigate('photo', {item: item, setGal: deleteOne })}
+    const bigPhoto = (item)=>{navigation.navigate('photo', {item: item })}
 
     const deleteSelected = async()=>{
         const fPhotos = photos.filter(x=>x.sel)

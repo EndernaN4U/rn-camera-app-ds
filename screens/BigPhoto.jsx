@@ -17,8 +17,7 @@ export default function BigPhoto({navigation, route}) {
 
     const deletep = ()=>{
         MediaLibrary.deleteAssetsAsync([item]).then(isit=>{
-            setGal(item.filename)
-            navigation.goBack();
+            navigation.goBack({fn: item.filename});
         });
         
     }
