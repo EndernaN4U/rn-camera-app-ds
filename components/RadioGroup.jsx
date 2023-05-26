@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Animated } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RadioButton } from 'react-native-paper'
 
@@ -10,16 +10,17 @@ export default function RadioGroup({onChange, value, data}) {
         onChange(valu);
     }
   return (
-    <View>
+    <View onTouchStart={()=>{console.log("wow")}}>
         {
             data.map((el, ind)=>{
                 return (
-                    <View key={ind} style={{display: 'flex', flexDirection: 'row'}}
-                        onTouchStart={()=>{handleChange(el)}}>
+                    <View key={ind} style={{display: 'flex', flexDirection: 'row', backgroundColor: 'red'}}
+                        onTouchStart={()=>{console.log("wwww")}}>
                         <RadioButton value={el}
                         status={el===val?'checked':'unchecked'}
+                        onPress={()=>{console.log("wow")}}
                         />
-                        <Text>{el}</Text>
+                        <Text style={{backgroundColor: 'grey'}} onPressOut={()=>{console.log("Xd")}}>{el}</Text>
                     </View>
                 )
             })

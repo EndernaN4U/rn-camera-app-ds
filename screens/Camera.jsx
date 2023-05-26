@@ -16,6 +16,7 @@ export default function CameraScreen() {
       ps: '1280x720',
       fm: Camera.Constants.FlashMode.off
     });
+    
     const posStngs = useRef({})
 
     const camera = useRef();
