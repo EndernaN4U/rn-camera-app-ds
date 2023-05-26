@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ScrollView, BackHandler } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Camera } from "expo-camera";
 import CircleButton from '../components/CircleButton';
@@ -6,7 +6,7 @@ import * as MediaLibrary from "expo-media-library";
 import SettingMenu from '../components/SettingMenu';
 
 
-export default function CameraScreen() {
+export default function CameraScreen({navigation}) {
     const [perm, setPerm] = useState(null);
     const [type, setType] = useState('back');
     const [opnd, setOpnd] = useState(false);
@@ -14,10 +14,13 @@ export default function CameraScreen() {
       ratio: '16:9',
       wb: Camera.Constants.WhiteBalance.auto,
       ps: '1280x720',
-      fm: Camera.Constants.FlashMode.off
+      fm: 0
     });
     
-    const posStngs = useRef({})
+    const [posStngs, setPosStngs] = useState({
+      wb: Camera.Constants.WhiteBalance,
+      fm: {"torch":2, "on": 1, "off": 0}
+    });
 
     const camera = useRef();
 
@@ -28,33 +31,73 @@ export default function CameraScreen() {
       }
     }
 
-    const getSizes = async () =>{
-      return await camera.current.getAvailablePictureSizesAsync(stngs.ratio);
+    const getSizes = async (ratio) =>{
+      return await camera.current.getAvailablePictureSizesAsync(ratio || stngs.ratio);
     }
+
+    const getAspect = ()=>{
+      const ratio = stngs.ratio.split(':');
+      return parseInt(ratio[1]) / parseInt(ratio[0])
+    }
+
+    const handleSettings = async(settings)=>{
+      if(stngs.ratio != settings.ratio){
+        const picSizes = await getSizes(settings.ratio);
+
+        setPosStngs(dat=>{
+          dat.ps = picSizes;
+          return {...dat};
+        })
+
+        setStngs(dat=>{
+          dat.ratio = settings.ratio;
+          dat.ps = picSizes[0];
+          return {...dat}
+        })
+      }
+      else setStngs({...settings});
+    }
+
+    const bH = BackHandler.addEventListener('hardwareBackPress',()=>{
+      console.log(opnd, 'camera')
+      if(!opnd){
+        navigation.navigate('gallery')
+        return false;
+      }
+      setOpnd(false);
+      return true;
+    });
 
     useEffect(()=>{
         (async()=>{
             let { status } = await Camera.requestCameraPermissionsAsync();
             setPerm((status === 'granted'));
         })()
+
+        return ()=>bH.remove();
     },[])
   return (
     <View style={styles.container}>
       {
         perm?
-        <Camera 
+        <><Camera 
             ref={camera}
 
             onCameraReady={async()=>{
-              posStngs.current.ratio = await camera.current.getSupportedRatiosAsync();
-              posStngs.current.ps = await getSizes();
+              const ratio = await camera.current.getSupportedRatiosAsync();
+              const ps = await getSizes();
+              setPosStngs(dat=>{
+                dat.ratio = ratio;
+                dat.ps = ps
+                return {...dat};
+              })
               setStngs(dat=>{
-                dat.ps = posStngs.current.ps[0];
+                dat.ps = ps[0];
                 return {...dat}
               })
             }}
 
-            style={styles.camera}
+            style={{...styles.camera, aspectRatio: getAspect()}}
 
             type={type === 'back'? Camera.Constants.Type.back : Camera.Constants.Type.front}
             ratio={stngs.ratio}
@@ -69,13 +112,15 @@ export default function CameraScreen() {
                 <CircleButton onPress={takePhoto} icon="photo" size={100}/>
                 <CircleButton onPress={()=>setOpnd(dat=>!dat)} icon="settings" size={75}/>
             </View>
-            {
-             opnd? 
-                <SettingMenu setSettings={setStngs} settings={stngs} possibles={posStngs.current}/>
-              :
-                <></>
-            }
+            
         </Camera>
+        {
+            opnd? 
+              <SettingMenu setSettings={handleSettings} settings={stngs} possibles={posStngs}/>
+            :
+              <></>
+        }
+        </>
         :
         <Text>Dawaj perma no</Text>
       }
@@ -89,10 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#222",
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 1
   },
   camera: {
-    width: dims.width,
-    aspectRatio: 9/16
+    maxWidth: dims.width,
+    maxHeigth: dims.height
   }
 })

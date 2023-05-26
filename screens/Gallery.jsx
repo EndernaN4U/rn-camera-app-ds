@@ -1,10 +1,11 @@
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator } from 'react-native'
+import { View, Text, Image, FlatList, StyleSheet, Dimensions, ActivityIndicator, BackHandler } from 'react-native'
 import MyButton from '../components/MyButton'
 import React, { useEffect, useRef, useState } from 'react'
 import * as MediaLibrary from "expo-media-library"
 import colors from '../data/colors.json'
 import FotoItem from '../components/FotoItem'
 import { useIsFocused } from "@react-navigation/native";
+import SettingMenu from '../components/SettingMenu'
 
 export default function Gallery({navigation, route}) {
     const [photos, setPhotos] = useState([]);
@@ -31,6 +32,15 @@ export default function Gallery({navigation, route}) {
             if(isFocused) refresh();
         })()
     },[isFocused])
+
+    const bH = BackHandler.addEventListener('hardwareBackPress',()=>{
+        refresh();
+        return true;
+    });
+
+    useEffect(()=>{
+        return ()=>bH.remove();
+    },[])
 
     const bigPhoto = (item)=>{navigation.navigate('photo', {item: item })}
 

@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, Dimensions, ScrollView } from 'react-native'
 import React from 'react'
 import MyButton from '../components/MyButton';
 import * as Sharing from 'expo-sharing';
@@ -23,16 +23,17 @@ export default function BigPhoto({navigation, route}) {
     }
     
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <View style={styles.imageView}>
-            <Image style={styles.image}
-             source={{uri: item.uri, width: 350, height: 600}}/>
+            <Image style={{...styles.image, aspectRatio: item.width/item.height}}
+             source={{uri: item.uri, width: item.width, height: item.height}}/>
         </View>
+        <Text style={styles.textStyle}>{item.width} x {item.height}</Text>
         <View style={styles.buttonView}>
             <MyButton onPress={share} style={styles.buttons} textStyle={styles.buttonsText}>Share</MyButton>
             <MyButton onPress={deletep} style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
         </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -54,8 +55,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     image:{
-        maxWidth: 350,
-        maxHeight: 600,
+        maxWidth: dims.width - 60,
         aspectRatio: 9/16
     },
     buttons:{
@@ -73,5 +73,11 @@ const styles = StyleSheet.create({
         fontSize: 22,
         textAlign: 'center',
         color: colors.mainTextColor
+    },
+    textStyle:{
+        textAlign: 'center',
+        color: colors.mainTextColor,
+        fontSize: 24,
+        marginBottom: 30
     }
 })
