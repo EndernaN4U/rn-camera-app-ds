@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Animated, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native'
 import React, { useEffect, useRef } from 'react'
 import RadioGroup from './RadioGroup'
 
@@ -13,6 +13,7 @@ export default function SettingMenu({settings, setSettings, possibles}) {
   },[])
   return (
     <Animated.View style={{...styles.container,opacity: opacity}}>
+      <ScrollView style={styles.scrlView}>
       <Text>SettingMenu</Text>
       <RadioGroup onChange={(value)=>{
         const sett = {...settings};
@@ -48,11 +49,12 @@ export default function SettingMenu({settings, setSettings, possibles}) {
         data={Object.keys(possibles.wb)}
         value={Object.keys(possibles.wb).find(x=>possibles.wb[x] === settings.wb )}
       />
-      
+      </ScrollView>
     </Animated.View>
   )
 }
 
+const dims = Dimensions.get('screen');
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
@@ -61,5 +63,8 @@ const styles = StyleSheet.create({
         top: 0,
         width: 200,
         backgroundColor: 'rgba(200,200,200,0.35)',
+    },
+    scrlView:{
+      height: dims.height
     }
 })

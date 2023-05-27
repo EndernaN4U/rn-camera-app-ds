@@ -12,7 +12,7 @@ export default function RadioGroup({onChange, value, data}) {
             data.map((el, ind)=>{
                 return (
                     <View key={ind} style={{display: 'flex', flexDirection: 'row'}}>
-                        <RadioButton value={el} isChecked={(el===value)} onPress={handleChange}/>
+                        <RadioButton size={40} value={el} isChecked={(el===value)} onPress={handleChange}/>
                         <Text>{el}</Text>
                     </View>
                 )
