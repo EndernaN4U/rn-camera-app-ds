@@ -18,6 +18,6 @@ export default function RadioGroup({onChange, value, data}) {
                 )
             })
         }
-    </View> 
+    </View>
   )
 }

@@ -3,16 +3,18 @@ import React, { useEffect, useRef } from 'react'
 import RadioGroup from './RadioGroup'
 
 export default function SettingMenu({settings, setSettings, possibles}) {
-  const opacity = useRef(new Animated.Value(0)).current;
+  const position = useRef(new Animated.Value(dims.height)).current;
   useEffect(()=>{
-    Animated.timing(opacity, {
-      toValue: 1,
+    Animated.spring(position, {
+      toValue: 0,
+      velocity: 1,
       duration: 500,
+      friction: 10,
       useNativeDriver: true
     }).start()
   },[])
   return (
-    <Animated.View style={{...styles.container,opacity: opacity}}>
+    <Animated.View style={{...styles.container,transform: [{translateY: position}]}}>
       <ScrollView style={styles.scrlView}>
       <Text>SettingMenu</Text>
       <RadioGroup onChange={(value)=>{
@@ -65,6 +67,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(200,200,200,0.35)',
     },
     scrlView:{
-      height: dims.height
+      height: dims.height * 3 / 4
     }
 })
