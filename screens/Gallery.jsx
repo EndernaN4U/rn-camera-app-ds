@@ -92,6 +92,8 @@ export default function Gallery({navigation, route}) {
             onPress={deleteSelected}>Delete</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}
             onPress={uploadSelected}>Upload</MyButton>
+            <MyButton style={styles.buttons} textStyle={styles.buttonsText}
+            onPress={()=>navigation.navigate('sets')}>Sets</MyButton>
         </View>
         {
             (photos.length > 0)?
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
     },
     buttons:{
         backgroundColor: colors.bgColor,
-        width: dims.width / 4.5,
+        width: dims.width / 5.5,
         height: 35,
 
         justifyContent: 'center',
