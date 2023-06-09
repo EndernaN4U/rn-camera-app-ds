@@ -6,6 +6,7 @@ import colors from '../data/colors.json'
 import FotoItem from '../components/FotoItem'
 import { useIsFocused } from "@react-navigation/native";
 import SettingMenu from '../components/SettingMenu'
+import { getIP } from '../src/getip';
 
 export default function Gallery({navigation, route}) {
     const [photos, setPhotos] = useState([]);
@@ -71,10 +72,13 @@ export default function Gallery({navigation, route}) {
                 name: item.filename
             })
         })
-        fetch("http://192.168.11.179:3000/upload", {
-          method: 'POST',
-          body: data
-        })
+        (async()=>{
+            const {ip, port} = await getIP();
+            fetch(`http://${ip}:${port}/upload`, {
+              method: 'POST',
+              body: data
+            })
+        })()
     }
 
   return (

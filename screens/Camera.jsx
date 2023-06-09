@@ -5,6 +5,7 @@ import CircleButton from '../components/CircleButton';
 import * as MediaLibrary from "expo-media-library";
 import SettingMenu from '../components/SettingMenu';
 import * as ImagePicker from 'expo-image-picker';
+import { getIP } from '../src/getip';
 
 
 export default function CameraScreen({navigation}) {
@@ -75,11 +76,14 @@ export default function CameraScreen({navigation}) {
         data.append('photo', {
           uri, type: 'image/*', name
         })
-        console.log(result);
-        fetch("http://192.168.11.179:3000/upload", {
-          method: 'POST',
-          body: data
-        })
+
+        (async()=>{
+          const {ip, port} = await getIP();
+          fetch(`http://${ip}:${port}/upload`, {
+            method: 'POST',
+            body: data
+          })
+        })()
       }
     }
 

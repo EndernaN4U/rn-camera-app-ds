@@ -4,6 +4,7 @@ import MyButton from '../components/MyButton';
 import * as Sharing from 'expo-sharing';
 import colors from '../data/colors.json';
 import * as MediaLibrary from "expo-media-library";
+import { getIP } from '../src/getip';
 
 export default function BigPhoto({navigation, route}) {
     const {item} = route.params;
@@ -29,10 +30,14 @@ export default function BigPhoto({navigation, route}) {
             type: 'image/*',
             name: item.filename
         })
-        fetch("http://192.168.11.179:3000/upload", {
-          method: 'POST',
-          body: data
-        })
+
+        (async()=>{
+            const {ip, port} = await getIP();
+            fetch(`http://${ip}:${port}/upload`, {
+              method: 'POST',
+              body: data
+            })
+        })()
     }
     
   return (
