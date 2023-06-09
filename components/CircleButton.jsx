@@ -4,7 +4,8 @@ import React from 'react'
 const imgs = {
   "change" : "https://cdn-icons-png.flaticon.com/512/126/126502.png",
   "photo" : "https://www.freepnglogos.com/uploads/plus-icon/plus-icon-plus-svg-png-icon-download-1.png",
-  "settings": "https://upload.wikimedia.org/wikipedia/commons/d/dc/Settings-icon-symbol-vector.png"
+  "settings": "https://upload.wikimedia.org/wikipedia/commons/d/dc/Settings-icon-symbol-vector.png",
+  "picker": "https://cdn.icon-icons.com/icons2/1674/PNG/512/colorpicker_111160.png"
 }
 
 export default function CircleButton({onPress, icon, size}) {

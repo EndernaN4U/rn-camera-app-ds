@@ -4,6 +4,7 @@ import { Camera } from "expo-camera";
 import CircleButton from '../components/CircleButton';
 import * as MediaLibrary from "expo-media-library";
 import SettingMenu from '../components/SettingMenu';
+import * as ImagePicker from 'expo-image-picker';
 
 
 export default function CameraScreen({navigation}) {
@@ -58,6 +59,30 @@ export default function CameraScreen({navigation}) {
       else setStngs({...settings});
     }
 
+    const imagePickerHandler = async()=>{
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if(!result.canceled) {
+        const data = new FormData();
+        const uri = result.assets[0].uri
+        const arrUri = uri.split('/');
+        const name = arrUri[arrUri.length - 1];
+
+        data.append('photo', {
+          uri, type: 'image/*', name
+        })
+        console.log(result);
+        fetch("http://192.168.11.179:3000/upload", {
+          method: 'POST',
+          body: data
+        })
+      }
+    }
+
     const bH = BackHandler.addEventListener('hardwareBackPress',()=>{
       if(!opnd){
         navigation.navigate('gallery')
@@ -110,6 +135,7 @@ export default function CameraScreen({navigation}) {
                 }} icon="change" size={75}/>
                 <CircleButton onPress={takePhoto} icon="photo" size={100}/>
                 <CircleButton onPress={()=>setOpnd(dat=>!dat)} icon="settings" size={75}/>
+                <CircleButton onPress={imagePickerHandler} icon="picker" size={75}/>
             </View>
             
         </Camera>

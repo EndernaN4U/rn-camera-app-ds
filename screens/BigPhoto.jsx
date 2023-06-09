@@ -6,7 +6,7 @@ import colors from '../data/colors.json';
 import * as MediaLibrary from "expo-media-library";
 
 export default function BigPhoto({navigation, route}) {
-    const {item, setGal} = route.params;
+    const {item} = route.params;
 
     const share = ()=>{
         Sharing.isAvailableAsync().then(isit=>{
@@ -19,7 +19,20 @@ export default function BigPhoto({navigation, route}) {
         MediaLibrary.deleteAssetsAsync([item]).then(isit=>{
             navigation.goBack({fn: item.filename});
         });
-        
+    }
+
+    const handleUpload = ()=>{
+        console.log(item);
+        const data = new FormData();
+        data.append('photo', {
+            uri: item.uri,
+            type: 'image/*',
+            name: item.filename
+        })
+        fetch("http://192.168.11.179:3000/upload", {
+          method: 'POST',
+          body: data
+        })
     }
     
   return (
@@ -32,6 +45,7 @@ export default function BigPhoto({navigation, route}) {
         <View style={styles.buttonView}>
             <MyButton onPress={share} style={styles.buttons} textStyle={styles.buttonsText}>Share</MyButton>
             <MyButton onPress={deletep} style={styles.buttons} textStyle={styles.buttonsText}>Delete</MyButton>
+            <MyButton onPress={handleUpload} style={styles.buttons} textStyle={styles.buttonsText}>Upload</MyButton>
         </View>
     </ScrollView>
   )
@@ -60,8 +74,9 @@ const styles = StyleSheet.create({
     },
     buttons:{
         backgroundColor: colors.bgColor,
-        width: dims.width / 3,
+        width: dims.width / 4,
         height: 50,
+        marginBottom: 20,
 
         justifyContent: 'center',
         alignItems: 'center',

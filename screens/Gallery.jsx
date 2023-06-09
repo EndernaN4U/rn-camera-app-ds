@@ -59,6 +59,24 @@ export default function Gallery({navigation, route}) {
         refresh();
     }
 
+    const uploadSelected = () => {
+        const fPhotos = photos.filter(x=>x.sel)
+        if(fPhotos.length == 0) return alert("Nalezy cos wybrać");
+
+        const data = new FormData();
+        fPhotos.map((item)=>{
+            data.append('photo', {
+                uri: item.uri,
+                type: 'image/*',
+                name: item.filename
+            })
+        })
+        fetch("http://192.168.11.179:3000/upload", {
+          method: 'POST',
+          body: data
+        })
+    }
+
   return (
     <View style={styles.container}>
         <View style={styles.btnContainer}>
@@ -68,6 +86,8 @@ export default function Gallery({navigation, route}) {
             onPress={()=>navigation.navigate('camera')}>Camera</MyButton>
             <MyButton style={styles.buttons} textStyle={styles.buttonsText}
             onPress={deleteSelected}>Delete</MyButton>
+            <MyButton style={styles.buttons} textStyle={styles.buttonsText}
+            onPress={uploadSelected}>Upload</MyButton>
         </View>
         {
             (photos.length > 0)?
