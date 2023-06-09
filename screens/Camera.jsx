@@ -59,7 +59,6 @@ export default function CameraScreen({navigation}) {
     }
 
     const bH = BackHandler.addEventListener('hardwareBackPress',()=>{
-      console.log(opnd, 'camera')
       if(!opnd){
         navigation.navigate('gallery')
         return false;
@@ -115,10 +114,10 @@ export default function CameraScreen({navigation}) {
             
         </Camera>
         {
-            opnd? 
-              <SettingMenu setSettings={handleSettings} settings={stngs} possibles={posStngs}/>
-            :
-              <></>
+          posStngs.ratio?
+          <SettingMenu setSettings={handleSettings} settings={stngs} possibles={posStngs} opnd={opnd}/>
+          :
+          <></>
         }
         </>
         :

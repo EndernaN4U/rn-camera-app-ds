@@ -1,18 +1,18 @@
 import { View, Text, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import RadioGroup from './RadioGroup'
 
-export default function SettingMenu({settings, setSettings, possibles}) {
+export default function SettingMenu({settings, setSettings, possibles, opnd}) {
   const position = useRef(new Animated.Value(dims.height)).current;
   useEffect(()=>{
     Animated.spring(position, {
-      toValue: 0,
+      toValue: opnd ? 0 : dims.height,
       velocity: 1,
       duration: 500,
       friction: 10,
       useNativeDriver: true
     }).start()
-  },[])
+  },[opnd])
   return (
     <Animated.View style={{...styles.container,transform: [{translateY: position}]}}>
       <ScrollView style={styles.scrlView}>
