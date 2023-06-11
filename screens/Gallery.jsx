@@ -71,7 +71,7 @@ export default function Gallery({navigation, route}) {
                 type: 'image/*',
                 name: item.filename
             })
-        })
+        });
         (async()=>{
             const {ip, port} = await getIP();
             fetch(`http://${ip}:${port}/upload`, {
@@ -79,6 +79,8 @@ export default function Gallery({navigation, route}) {
               body: data
             })
         })()
+        photos.map(el=>el.sel = false);
+        setPhotos([...photos]);
     }
 
   return (

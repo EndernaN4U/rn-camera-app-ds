@@ -29,7 +29,7 @@ export default function BigPhoto({navigation, route}) {
             uri: item.uri,
             type: 'image/*',
             name: item.filename
-        })
+        });
 
         (async()=>{
             const {ip, port} = await getIP();

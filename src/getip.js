@@ -5,7 +5,7 @@ async function saveItem(key, value){
 }
 
 async function getItem(key){
-    await SecureStore.getItemAsync(key);
+    return await SecureStore.getItemAsync(key);
 }
 
 export async function getIP(){
